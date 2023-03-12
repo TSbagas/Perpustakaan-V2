@@ -1,4 +1,5 @@
 <?php
+// Database Koneksi
     class database {
         private $koneksi;
         public function __construct()
@@ -8,6 +9,9 @@
             echo 'gagal';
         }
         }
+// Database Koneksi END
+
+// Users
         public function proses_login($username,$password){
             $login_query = $this->koneksi->query("SELECT * FROM users
             WHERE username='$username' AND password=md5('$password')");
@@ -76,8 +80,9 @@
             $query = $this->koneksi->query("SELECT * FROM users");
             return $query->num_rows;
         }
+// Users END
 
-        // Siswa
+// Siswa
         public function proses_hapus_siswa($id){
             $this->koneksi->query("DELETE from siswa where siswa_id='$id'");
             session_start();
@@ -124,7 +129,8 @@
                 header("location:../dashboard.php?pages=siswa");
             }      
         }
-        // Buku
+// Siswa END
+// Buku
         public function list_buku(){
             $query = $this->koneksi->query("SELECT * FROM buku");
             while($list = $query->fetch_object()){
@@ -159,6 +165,7 @@
             $query = $this->koneksi->query("SELECT * FROM buku where buku_id='$buku_id'");
             return $query->fetch_object();
         }
+        
         public function proses_ubah_buku($judul,$deskripsi,$penulis,$penerbit,$gambar,$buku_id){
             if ($gambar == null) {
                 $this->koneksi->query("UPDATE buku set judul_buku='$judul',deskripsi='$deskripsi', penulis='$penulis' ,penerbit='$penerbit' WHERE buku_id='$buku_id'");
@@ -173,7 +180,12 @@
                 header("location:../dashboard.php?pages=buku");
             }      
         }
-        // Peminjaman
+        public function menghitung_buku(){
+            $query = $this->koneksi->query("SELECT * FROM buku");
+            return $query->num_rows;
+        }
+// Buku END
+// Peminjaman
         public function proses_pencarian_nama($nisn){
                 header("location:../dashboard.php?pages=peminjaman&&act=tambah&&nisn=$nisn");
         }
@@ -204,14 +216,14 @@
             }
             return $hasil;
         }
-        public function menghitung_buku(){
-            $query = $this->koneksi->query("SELECT * FROM buku");
-            return $query->num_rows;
-        }
+        
         public function menghitung_peminjaman(){
             $query = $this->koneksi->query("SELECT * FROM peminjaman");
             return $query->num_rows;
         }
+// Peminjaman END
+// Database Koneksi
     }   
     $data = new database();
+// Database Koneksi END
 ?>

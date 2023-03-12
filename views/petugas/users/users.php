@@ -9,11 +9,13 @@
         <td>Level</td>
         <td>Opsi</td>
     </tr>
+<!-- Menampilkan List Users -->
         <?php
         $i = 1;
         foreach ($data->list_users() as $u){
             ?>
-             <tr>
+<!-- List END -->
+    <tr>
                 <td><?=$i++?></td>
                 <td><?=$u->username?></td>
                 <td><?=$u->level?></td>
@@ -22,8 +24,10 @@
                     <a href="routes/proses.php?act=hapus_user&id=<?=$u->user_id?>" class='btn btn-danger' onclick='return confirm("Apakah anda ingin menghapus data ini?")'>Hapus</a>
                 </td>
             </tr>
+<!-- List END -->
             <?php
     }
 
         ?>
+<!-- List END -->
 </table>
