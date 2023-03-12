@@ -1,5 +1,4 @@
 <?php
-    // Cara ke 1
     class database {
         private $koneksi;
         public function __construct()
@@ -46,7 +45,7 @@
             $query = $this->koneksi->query("INSERT INTO users VALUES(null,'$uname',md5('$pwd'),'petugas','0')");
             if ($query){
                 session_start();
-                $_SESSION['success'] = 'Data user berhasil';
+                $_SESSION['success'] = 'Data User berhasil ditambah';
                 header("location:../dashboard.php?pages=users");
             }
         }
