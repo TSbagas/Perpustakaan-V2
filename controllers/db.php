@@ -176,7 +176,7 @@
         }
         // Peminjaman
         public function proses_pencarian_nama($nisn){
-                header("location:../dashboard.php?pages=peminjaman&&nisn=$nisn");
+                header("location:../dashboard.php?pages=peminjaman&&act=tambah&&nisn=$nisn");
         }
         public function proses_pencarian($nisn){
             $query = $this->koneksi->query("SELECT * FROM siswa where nisn='$nisn'");
