@@ -12,7 +12,7 @@
         }
 // Database Koneksi END
 
-// LoginLogout
+// Proses Login dan Logout
         public function proses_login($username,$password){
             $login_query = $this->koneksi->query("SELECT * FROM users
             WHERE username='$username' AND password=md5('$password')");
@@ -79,7 +79,16 @@
             $_SESSION['success'] = "Data $table berhasil dihapus";   
             header("location:../dashboard.php?pages=$table");
         }
-// Users
+// Proses Pencarian
+        public function proses_pencarian_nama($nisn){
+            header("location:../dashboard.php?pages=peminjaman&&act=tambah&&nisn=$nisn");
+        }
+        public function proses_pencarian($nisn){
+            $query = $this->koneksi->query("SELECT * FROM siswa where nisn='$nisn'");
+            return $query->fetch_object();
+        }
+        
+// Proses Simpan
         public function proses_simpan_user($uname,$pwd){
             $query = $this->koneksi->query("INSERT INTO users VALUES(null,'$uname',md5('$pwd'),'petugas','0')");
             if ($query){
@@ -88,22 +97,7 @@
                 header("location:../dashboard.php?pages=users");
             }
         }
-        public function proses_ubah_user($uname,$pwd,$user_id){
-            if($pwd == null){
-                $this->koneksi->query("UPDATE users set username='$uname' WHERE user_id='$user_id'");
-                session_start();
-                $_SESSION['success'] = 'Data user berhasil diubah';
-                header("location:../dashboard.php?pages=users");
-            }else {
-                $this->koneksi->query("UPDATE users set username='$uname',password=md5('$pwd') WHERE user_id='$user_id'");
-                session_start();
-                $_SESSION['success'] = 'Data user berhasil diubah';    
-                header("location:../dashboard.php?pages=users");
-            }
-        }
-// Users END
-
-// Siswa
+        
         public function proses_simpan_siswa($nisn,$nama,$kelas,$gambar){
             $query = $this->koneksi->query("INSERT INTO siswa VALUES(null,'$nisn','$nama','$kelas','$gambar')");
             if ($query){
@@ -115,23 +109,6 @@
             }
             
         }
-        
-        public function proses_ubah_siswa($nisn,$nama,$kelas,$siswa_id,$gambar){
-            if ($gambar == null) {
-                $this->koneksi->query("UPDATE siswa set nisn='$nisn',nama_siswa='$nama', kelas='$kelas' WHERE siswa_id='$siswa_id'");
-                session_start();
-                $_SESSION['success'] = 'Data siswa berhasil diubah';
-                header("location:../dashboard.php?pages=siswa");
-            }else {
-                move_uploaded_file($_FILES['gambar']['tmp_name'],'../assets/img/gambar/' . $gambar);
-                $this->koneksi->query("UPDATE siswa set nisn='$nisn',nama_siswa='$nama', kelas='$kelas',foto='$gambar' WHERE siswa_id='$siswa_id'");
-                session_start();
-                $_SESSION['success'] = 'Data siswa berhasil diubah';
-                header("location:../dashboard.php?pages=siswa");
-            }      
-        }
-// Siswa END
-// Buku
         public function proses_simpan_buku($judul,$deskripsi,$penulis,$penerbit,$gambar){
             if($gambar == null){
                 $query = $this->koneksi->query("INSERT INTO buku VALUES(null,'$judul','$deskripsi','$penulis','$penerbit','default.jpg')");
@@ -149,6 +126,43 @@
         };
             
         }
+        public function proses_simpan_peminjaman($no_peminjaman, $siswa, $buku, $tgl_pinjam, $tgl_kembali){
+            $query = $this->koneksi->query("INSERT INTO peminjaman VALUES (null,'$no_peminjaman','$buku','$siswa','$tgl_pinjam','$tgl_kembali')");
+            if ($query) {
+                session_start();
+                $_SESSION['success'] = 'Data peminjaman berhasil disimpan';
+                header("location:../dashboard.php?pages=peminjaman");
+            }
+        }
+// Proses Ubah
+        public function proses_ubah_user($uname,$pwd,$user_id){
+            if($pwd == null){
+                $this->koneksi->query("UPDATE users set username='$uname' WHERE user_id='$user_id'");
+                session_start();
+                $_SESSION['success'] = 'Data user berhasil diubah';
+                header("location:../dashboard.php?pages=users");
+            }else {
+                $this->koneksi->query("UPDATE users set username='$uname',password=md5('$pwd') WHERE user_id='$user_id'");
+                session_start();
+                $_SESSION['success'] = 'Data user berhasil diubah';    
+                header("location:../dashboard.php?pages=users");
+            }
+        }
+        
+        public function proses_ubah_siswa($nisn,$nama,$kelas,$siswa_id,$gambar){
+            if ($gambar == null) {
+                $this->koneksi->query("UPDATE siswa set nisn='$nisn',nama_siswa='$nama', kelas='$kelas' WHERE siswa_id='$siswa_id'");
+                session_start();
+                $_SESSION['success'] = 'Data siswa berhasil diubah';
+                header("location:../dashboard.php?pages=siswa");
+            }else {
+                move_uploaded_file($_FILES['gambar']['tmp_name'],'../assets/img/gambar/' . $gambar);
+                $this->koneksi->query("UPDATE siswa set nisn='$nisn',nama_siswa='$nama', kelas='$kelas',foto='$gambar' WHERE siswa_id='$siswa_id'");
+                session_start();
+                $_SESSION['success'] = 'Data siswa berhasil diubah';
+                header("location:../dashboard.php?pages=siswa");
+            }      
+        }
         
         public function proses_ubah_buku($judul,$deskripsi,$penulis,$penerbit,$gambar,$buku_id){
             if ($gambar == null) {
@@ -164,26 +178,6 @@
                 header("location:../dashboard.php?pages=buku");
             }      
         }
-// Buku END
-// Peminjaman
-        public function proses_pencarian_nama($nisn){
-            header("location:../dashboard.php?pages=peminjaman&&act=tambah&&nisn=$nisn");
-        }
-        public function proses_pencarian($nisn){
-            $query = $this->koneksi->query("SELECT * FROM siswa where nisn='$nisn'");
-            return $query->fetch_object();
-        }
-        
-        public function proses_simpan_peminjaman($no_peminjaman, $siswa, $buku, $tgl_pinjam, $tgl_kembali){
-            $query = $this->koneksi->query("INSERT INTO peminjaman VALUES (null,'$no_peminjaman','$buku','$siswa','$tgl_pinjam','$tgl_kembali')");
-            if ($query) {
-                session_start();
-                $_SESSION['success'] = 'Data peminjaman berhasil disimpan';
-                header("location:../dashboard.php?pages=peminjaman");
-            }
-        }
-        
-// Peminjaman END
 // Database Koneksi
     }   
     $data = new database();
