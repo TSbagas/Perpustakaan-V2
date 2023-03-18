@@ -314,7 +314,7 @@
               <div class="row">
                 <div class="col-8">
                 <p class="text-sm mb-0 text-uppercase font-weight-bold">Buku Anda</p>
-                  <p class="mb-0 text-bold"><?=$data->Jumlah_DB('peminjaman');?></p>
+                  <p class="mb-0 text-bold"><?=$data->Jumlah_DB_Peminjaman($_SESSION['nis']);?></p>
                 </div>
                 <div class="col-4 text-end">
                   <div class="icon icon-shape bg-gradient-warning shadow-warning text-center rounded-circle">

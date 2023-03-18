@@ -67,6 +67,10 @@
             $query = $this->koneksi->query("SELECT * FROM $table");
             return $query->num_rows;
         }
+        public function Jumlah_DB_Peminjaman($nisn){
+            $query = $this->koneksi->query("SELECT * FROM peminjaman INNER JOIN buku ON buku.buku_id = peminjaman.buku_id WHERE nisn=$nisn");
+            return $query->num_rows;
+        }
 // Proses Menampilkan Data yang ingin diubah
         public function Tampil_data($table,$where,$id){
             $query = $this->koneksi->query("SELECT * FROM $table where $where='$id'");
