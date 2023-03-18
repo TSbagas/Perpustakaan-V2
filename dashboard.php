@@ -124,20 +124,28 @@
               echo ucfirst($_GET['pages']);
             }else{
               echo 'Dashboard';
-            } ?></h6>
+            }
+            $s = $data->Tampil_data('siswa','nisn',$_SESSION['nis']);
+            ?></h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
           <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-            <span class="text-white btn btn-outline-light">Welcome  
+            <a href="dashboard.php?pages=profile"><span class="text-white btn my-2 ps-5">Welcome  
               <?php
-              $s = $data->Tampil_data('siswa','nisn',$_SESSION['nis']);
               if($_SESSION['level'] == 'Siswa'){
                 echo ucfirst($s->nama_siswa);
+                ?>
+                <img src="assets\img\gambar\<?=$s->foto ?>" alt="" width=50px height=50px class="rounded-circle mx-3" style="object-fit:cover">
+                <?php
               }else{
                 echo $_SESSION['username'];
+                ?>
+                <img src="assets\img\gambar\default.png?>" alt="" width=50px height=50px class="rounded-circle mx-3" style="object-fit:cover">
+                <?php
               }
-             ?> </span>
-            <a href="routes/proses.php?aksi=logout" class="btn btn-danger text-light ms-2">Log out</a>
+             ?> 
+             </span></a>
+            <a href="routes/proses.php?aksi=logout" class="btn btn-danger text-white ms-2 my-2">Log out</a>
           </div>
           <ul class="navbar-nav  justify-content-end">
             <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
@@ -224,6 +232,9 @@
     </nav>
     <!-- End Navbar -->
     <div class="container-fluid py-4">
+    <?php
+    if($_SESSION['level'] == 'petugas'){
+      ?>
       <div class="row">
         <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
           <div class="card">
@@ -294,6 +305,30 @@
           </div>
         </div>
       </div>
+      <?php
+    }elseif($_SESSION['level'] == 'Siswa'){
+      ?>
+        <div class="col-xl-3 col-sm-6">
+          <div class="card">
+            <div class="card-body p-3">
+              <div class="row">
+                <div class="col-8">
+                <p class="text-sm mb-0 text-uppercase font-weight-bold">Buku Anda</p>
+                  <p class="mb-0 text-bold"><?=$data->Jumlah_DB('peminjaman');?></p>
+                </div>
+                <div class="col-4 text-end">
+                  <div class="icon icon-shape bg-gradient-warning shadow-warning text-center rounded-circle">
+                    <i class="ni ni-cart text-lg opacity-10" aria-hidden="true"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <?php
+    }
+    ?>
+    
       <div class="row mt-4">
         <div class="col-lg-12 mb-lg-8 mb-4">
           <div class="card z-index-2 h-100">
@@ -351,7 +386,7 @@
                   elseif($pages == 'profile'){
                     include "views/siswa/profile.php";
                   }else{
-                    include "views/Page/pengertian_CRUD.php";
+                    include "views/siswa/data_peminjaman.php";
                   }
                 
                   
