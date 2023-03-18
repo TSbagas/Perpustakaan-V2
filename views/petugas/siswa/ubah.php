@@ -6,6 +6,7 @@
 <form action="routes/proses.php" method="post" enctype="multipart/form-data">
     <div class="form-group">
         <input type="hidden" value="<?=$_GET['id']?>" name="siswa_id">
+        <input type="hidden" value="siswa" name="pages">
         <label for="">NISN</label>
         <input type="text" class="form-control" name="nisn" placeholder="Masukkan Username" value="<?=$u->nisn?>">
     </div>

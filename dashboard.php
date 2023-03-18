@@ -1,13 +1,15 @@
-<?php
-session_start();
-include 'controllers/db.php';
-if ($_SESSION['login'] == null){
-  header("location:login.php");
-}
-?>
+<!-- php -->
+  <?php
+  session_start();
+  include 'controllers/db.php';
+  if ($_SESSION['login'] == null){
+    header("location:login.php");
+  }
+  ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Link resource -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
@@ -27,7 +29,7 @@ if ($_SESSION['login'] == null){
   <link id="pagestyle" href="assets/css/argon-dashboard.css?v=2.0.4" rel="stylesheet" />
 
 </head>
-
+<!-- Main -->
 <body class="g-sidenav-show   bg-gray-100">
   <div class="min-height-300 bg-primary position-absolute w-100"></div>
   <aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 " id="sidenav-main">
@@ -42,6 +44,7 @@ if ($_SESSION['login'] == null){
     <div class="w-auto " id="sidenav-collapse-main">
       <ul class="navbar-nav">
         <?php
+        // proses login jika sebagai petugas
         $level = $_SESSION['level'];
         if($level == 'petugas'){
           ?>
@@ -86,6 +89,7 @@ if ($_SESSION['login'] == null){
           </a>
         </li>
           <?php
+        // proses login jika sebagai Siswa
         }else if($level == 'Siswa'){
           ?>
             <li class="nav-item mb-2">
@@ -94,6 +98,14 @@ if ($_SESSION['login'] == null){
               <i class="ni ni-bag-17 text-primary text-sm opacity-10"></i>
             </div>
             <span class="nav-link-text ms-1">Data peminjaman</span>
+          </a>
+        </li>
+            <li class="nav-item mb-2">
+          <a class="nav-link active" href="dashboard.php?pages=profile">
+            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="ni ni-single-02 text-primary text-sm opacity-10"></i>
+            </div>
+            <span class="nav-link-text ms-1">Profile</span>
           </a>
         </li>
           <?php
@@ -116,7 +128,15 @@ if ($_SESSION['login'] == null){
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
           <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-            <span class="text-white btn btn-outline-light">Welcome , <?php echo ucfirst ($_SESSION['username'])?> </span>
+            <span class="text-white btn btn-outline-light">Welcome  
+              <?php
+              $s = $data->Tampil_data('siswa','nisn',$_SESSION['nis']);
+              if($_SESSION['level'] == 'Siswa'){
+                echo ucfirst($s->nama_siswa);
+              }else{
+                echo $_SESSION['username'];
+              }
+             ?> </span>
             <a href="routes/proses.php?aksi=logout" class="btn btn-danger text-light ms-2">Log out</a>
           </div>
           <ul class="navbar-nav  justify-content-end">
@@ -280,7 +300,10 @@ if ($_SESSION['login'] == null){
             <div class="card-header pb-0 pt-3 bg-transparent">
               <!-- This is content -->
                 <?php
+                // Proses Route
                 @$pages = $_GET['pages'];
+                if($_SESSION['level'] == 'petugas'){
+
                 if($pages == 'users'){
                   @$act = $_GET['act'];
                   if($act == 'tambah'){
@@ -318,15 +341,23 @@ if ($_SESSION['login'] == null){
                   }else {
                     include "views/petugas/peminjaman/peminjaman.php";
                   }
-                }
-                elseif($pages == 'data peminjaman'){
-                  include "views/siswa/data_peminjaman.php";
                 }else{
                   include "views/Page/pengertian_CRUD.php";
-                  ?>
-                  <?php
                 }
-                ?>  
+                }elseif($_SESSION['level'] == 'Siswa'){
+                  if($pages == 'data peminjaman'){
+                    include "views/siswa/data_peminjaman.php";
+                  }
+                  elseif($pages == 'profile'){
+                    include "views/siswa/profile.php";
+                  }else{
+                    include "views/Page/pengertian_CRUD.php";
+                  }
+                
+                  
+              }
+                
+                  ?>
               <!-- END -->
             </div>
           </div>

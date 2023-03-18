@@ -41,9 +41,10 @@
         $nisn = $_POST['nisn'];
         $nama = $_POST['nama'];
         $kelas = $_POST['kelas'];
+        $pages = $_POST['pages'];
         $siswa_id = $_POST['siswa_id'];
         $gambar = $_FILES['gambar']['name'];
-        $data->proses_ubah_siswa($nisn,$nama,$kelas,$siswa_id,$gambar);
+        $data->proses_ubah_siswa($nisn,$nama,$kelas,$siswa_id,$gambar,$pages);
     }
 // Buku
     if(@$_POST['simpan_buku']){

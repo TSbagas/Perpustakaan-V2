@@ -23,7 +23,7 @@
                 $_SESSION['login']    = 1;
                 $_SESSION['username'] = $data->username;
                 $_SESSION['level']    = $data->level;
-                $_SESSION['nis']      = $data->nis;
+                $_SESSION['nis']      = $data->nisn;
                 header("location:../dashboard.php");
             }else {
                 session_start();
@@ -149,18 +149,18 @@
             }
         }
         
-        public function proses_ubah_siswa($nisn,$nama,$kelas,$siswa_id,$gambar){
+        public function proses_ubah_siswa($nisn,$nama,$kelas,$siswa_id,$gambar,$pages){
             if ($gambar == null) {
                 $this->koneksi->query("UPDATE siswa set nisn='$nisn',nama_siswa='$nama', kelas='$kelas' WHERE siswa_id='$siswa_id'");
                 session_start();
                 $_SESSION['success'] = 'Data siswa berhasil diubah';
-                header("location:../dashboard.php?pages=siswa");
+                header("location:../dashboard.php?pages=$pages");
             }else {
                 move_uploaded_file($_FILES['gambar']['tmp_name'],'../assets/img/gambar/' . $gambar);
                 $this->koneksi->query("UPDATE siswa set nisn='$nisn',nama_siswa='$nama', kelas='$kelas',foto='$gambar' WHERE siswa_id='$siswa_id'");
                 session_start();
                 $_SESSION['success'] = 'Data siswa berhasil diubah';
-                header("location:../dashboard.php?pages=siswa");
+                header("location:../dashboard.php?pages=$pages");
             }      
         }
         

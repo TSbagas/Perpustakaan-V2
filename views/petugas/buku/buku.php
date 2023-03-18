@@ -1,7 +1,4 @@
 <a href="dashboard.php?pages=buku&act=tambah" class="btn btn-success mb-3">Tambah Buku</a>
-<?php
-
-?>
 <table class="table border shadow text-center align-middle">
     <tr class="bg-primary text-white ">
         <td>No</td>
